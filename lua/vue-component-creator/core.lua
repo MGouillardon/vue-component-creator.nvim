@@ -2,6 +2,7 @@ local config = require("vue-component-creator.config")
 local utils = require("vue-component-creator.utils")
 local file_ops = require("vue-component-creator.file_ops")
 local templates = require("vue-component-creator.templates")
+local ts_detector = require("vue-component-creator.ts_detector")
 
 local M = {}
 
@@ -11,7 +12,19 @@ M.create_component = function(path, template_type, selected_text)
 		return
 	end
 
+	local ts_project = ts_detector.is_typescript_project()
+	local force_ts = config.values.force_typescript or false
+
+	if ts_project or force_ts then
+		vim.notify("TypeScript project detected or forced in config", vim.log.levels.INFO)
+
+		if template_type == "default" and config.values.templates.typescript then
+			template_type = "typescript"
+		end
+	end
+
 	local template_type_str = template_type or "default"
+	vim.notify("Using template type: " .. template_type_str, vim.log.levels.INFO)
 
 	local content
 	local success, err = pcall(function()

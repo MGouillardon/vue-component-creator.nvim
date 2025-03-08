@@ -1,9 +1,12 @@
 local config = require("vue-component-creator.config")
+local ts_detector = require("vue-component-creator.ts_detector")
 
 local M = {}
 
 M.get_template = function(template_type)
-	local template = config.values.templates[template_type or "default"]
+	local best_template_type = ts_detector.get_best_template_type(template_type)
+
+	local template = config.values.templates[best_template_type]
 	if not template then
 		error("Invalid template type: " .. tostring(template_type))
 	end

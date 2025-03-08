@@ -14,9 +14,19 @@ M.values = {
 		template_only = [[<template>
 %s
 </template>]],
+
+		typescript = [[<script setup lang="ts">
+
+</script>
+
+<template>
+%s
+</template>]],
 	},
 	indent_size = 2,
 	auto_format = true,
+	force_typescript = false,
+	auto_detect_typescript = true,
 }
 
 M.setup = function(opts)

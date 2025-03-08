@@ -31,6 +31,11 @@ M.setup = function()
 			type = "template_only",
 			desc = "Create a new Vue component with template only",
 		},
+		{
+			name = "VueTypescriptComponent",
+			type = "typescript",
+			desc = "Create a new Vue component with TypeScript",
+		},
 	}
 
 	for _, cmd in ipairs(commands) do
