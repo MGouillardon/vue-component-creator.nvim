@@ -5,6 +5,7 @@ A Neovim plugin to simplify Vue component creation and extraction. This plugin a
 - Create new Vue components with predefined templates
 - Extract selected code to a new component file
 - Keep organized component structure in your project
+- Automatically detect TypeScript projects and use appropriate templates
 
 ## Features
 
@@ -13,6 +14,7 @@ A Neovim plugin to simplify Vue component creation and extraction. This plugin a
 - 🧹 Automatic code indentation and formatting
 - 📁 Automatic directory creation
 - 🔌 Customizable templates and configuration
+- 🔍 TypeScript detection and integration
 
 ## Installation
 
@@ -20,10 +22,9 @@ A Neovim plugin to simplify Vue component creation and extraction. This plugin a
 
 ```lua
 return {
-  dir = "~/Projects/vue-component-creator.nvim/", -- Path to your local plugin
-  -- or use your GitHub repository:
-  -- 'MGouillardon/vue-component-creator.nvim',
+  'MGouillardon/vue-component-creator.nvim',
   ft = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact" }, -- Filetypes to load the plugin for
+  cmd = { "VueComponent", "VueTemplate", "VueTypescriptComponent" },
   config = function()
     require("vue-component-creator").setup({
       components_dir = "src/components/", -- Customize for your project
@@ -45,7 +46,7 @@ use {
 
 ## Usage
 
-The plugin provides two main commands:
+The plugin provides three main commands:
 
 ### 1. Create an empty component
 
@@ -55,7 +56,15 @@ The plugin provides two main commands:
 
 This creates a new file at `components/buttons/PrimaryButton.vue` with the default template.
 
-### 2. Extract selected code to a new component
+### 2. Create a TypeScript component
+
+```vim
+:VueTypescriptComponent components/buttons/PrimaryButton
+```
+
+This creates a new file with TypeScript support (`lang="ts"` attribute in the script tag).
+
+### 3. Extract selected code to a new component
 
 1. Select code in visual mode
 2. Run `:VueComponent components/cards/InfoCard`
@@ -68,6 +77,14 @@ To create or extract a component with only a `<template>` section:
 ```vim
 :VueTemplate components/icons/CloseIcon
 ```
+
+## TypeScript Support
+
+The plugin can automatically detect TypeScript projects and use TypeScript templates when appropriate:
+
+- If a `tsconfig.json` file is found in your project root
+- When the `:VueTypescriptComponent` command is used explicitly
+- You can force TypeScript mode through configuration
 
 ## Configuration
 
@@ -83,6 +100,10 @@ require('vue-component-creator').setup({
 
   -- Whether to automatically format pasted code
   auto_format = true,
+
+  -- TypeScript configuration
+  force_typescript = false,       -- Always use TypeScript templates
+  auto_detect_typescript = true,  -- Automatically detect TypeScript projects
 
   -- Custom templates
   templates = {
@@ -100,7 +121,7 @@ require('vue-component-creator').setup({
 %s
 </template>]],
 
-    -- You can add your own templates
+    -- TypeScript template
     typescript = [[<script setup lang="ts">
 
 </script>
